@@ -1,0 +1,37 @@
+
+<style>
+    .share-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+   
+    background: #f9f9f9;
+}
+
+</style>
+
+<div style=" display: flex; flex-direction: row; align-items: center; margin: 30px 30px 0px 300px;">
+{% for share in shares %}
+
+<div class="share-card">
+    <h2>{{ share.company_name }} ({{ share.share_group_name }})</h2>
+    <p><strong>Type:</strong> {{ share.share_type_name }}</p>
+    <p><strong>Group:</strong> {{ share.share_group_name }}</p>
+    <p><strong>Sub Group:</strong> {{ share.sub_group }}</p>
+    <p><strong>Status:</strong> {{ share.status_name }}</p>
+    <p><strong>Open Date:</strong> {{ share.issue_open_date }}</p>
+    <p><strong>Close Date:</strong> {{ share.issue_close_date }}</p>
+
+    <div>
+        <a href="{% url 'apply:apply-share' share.company_share_id %}">
+            <button>Apply Now</button>
+        </a>
+</div>
+</div>
+
+<hr>
+{% empty %}
+<p>No shares available.</p>
+{% endfor %}
+</div>

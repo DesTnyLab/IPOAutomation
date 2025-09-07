@@ -1,0 +1,21 @@
+<!-- accounts/templates/accounts/login.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="login-container">
+    <h2>Login</h2>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+    </form>
+
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <p class="{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
