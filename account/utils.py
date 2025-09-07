@@ -2,7 +2,7 @@
 
 from .models import BankDetails
 
-def add_bank_details(id, response):
+def add_bank_details(id, response, object):
     """ Handle adding bank details safely """
     try:
         data = response.json()
@@ -24,7 +24,9 @@ def add_bank_details(id, response):
 
         obj, created = BankDetails.objects.update_or_create(
             customer_id=customer_id,
+           
             defaults={
+                'account' : object,
                 'account_number': account_number,
                 'account_type_id': account_type_id,
                 'bank_id': bank_id,

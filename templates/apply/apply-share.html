@@ -16,7 +16,7 @@
             <p><strong>Account Name:</strong> {{ account.name }}</p>
             <p><strong>Demat Number:</strong> {{ account.get_demat }}</p>
             <p><strong>Applied Kitta:</strong> 10 </p>
-            <div>
+            <div> <a href="{% url 'apply:apply_now' account.id share.id %}">
                 <button 
                     id="applyBtn-{{ account.id }}" 
                     class="applyBtn" 
@@ -24,7 +24,7 @@
                     data-share-id="{{ share.id }}" 
                     disabled>
                     Loading...
-                </button>
+                </button> </a>
             </div>
         </div>
     {% empty %}
@@ -34,27 +34,41 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function () {
-    $(".applyBtn").each(function () {
-        let button = $(this);
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+$(document).ready(async function () {
+    const buttons = $(".applyBtn").toArray(); // convert to array for async loop
+
+    for (const btn of buttons) {
+        let button = $(btn);
         let userId = button.data("user-id");
         let shareId = button.data("share-id");
-        console.log(`Checking status for User ID: ${userId}, Share ID: ${shareId}`);
-        $.ajax({
-            url: `/apply/check-status/${userId}/${shareId}/`,
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                if (data.status === "True") {
-                    button.prop("disabled", false).text("Apply Now ");
-                } else {
-                    button.prop("disabled", true).text("Applied ");
-                }
-            },
-            error: function () {
-                button.prop("disabled", true).text("Error ");
+
+        try {
+            const data = await $.ajax({
+                url: `/apply/check-status/${userId}/${shareId}/`,
+                type: "GET",
+                dataType: "json",
+            });
+
+            console.log(`Status for User ID: ${userId}, Share ID: ${shareId} is ${data.status}`);
+
+            if (data.status === "True") {
+                button.prop("disabled", false).text("Apply Now ");
+            } else {
+                button.prop("disabled", true).text("Applied ");
             }
-        });
-    });
+        } catch (error) {
+            button.prop("disabled", true).text("Error ");
+        }
+
+        // Sleep 1000ms (1 second) before next iteration
+        await sleep(1000);
+    }
 });
 </script>
+
+
+

@@ -14,14 +14,14 @@ MEROSHARE_BANK_URL = os.getenv("MEROSHARE_BANK_URL")
 
 
 
-def validate_user(payload):
+def validate_user(payload, object):
     """ Validate user account if they got logged in to meroshare """
     try: 
         response = requests.post(MEROSHARE_LOGIN_URL, json=payload)
         if response.status_code == 200:
             authorization_token = response.headers.get('Authorization')
             time.sleep(3)
-            if get_bank_details(authorization_token):
+            if get_bank_details(authorization_token, object):
                 return True
             else:
                 return False
@@ -33,7 +33,7 @@ def validate_user(payload):
         return False
 
 
-def get_bank_details(authorization_token):
+def get_bank_details(authorization_token, object):
     """ Fetch bank details using the provided headers """
     try: 
         headers['Authorization'] = authorization_token
@@ -45,7 +45,7 @@ def get_bank_details(authorization_token):
                 id = bank['id']
             time.sleep(3)
             response = requests.get(f"{MEROSHARE_BANK_URL}{id}", headers=headers, verify=True)
-            if add_bank_details(id, response):
+            if add_bank_details(id, response, object):
                 return True
             else:
                 return False

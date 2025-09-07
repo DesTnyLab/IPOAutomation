@@ -50,7 +50,7 @@ def validate_account(object):
         "username": username,
         "password": password
     }
-    if validate_user(payload):
+    if validate_user(payload, object):
         return True
     else:
         return False

@@ -74,8 +74,6 @@ def get_applicable_shares(payload):
         time.sleep(3)
         response = requests.post(MEROSHARE_APPLICABLE_SHARES_URL, json=payload1, headers=headers)
         if response.status_code == 200:
-            print("Applicable Shares: from Meoroshare.py")
-            print(response.json())
             return response.json()
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
@@ -83,3 +81,18 @@ def get_applicable_shares(payload):
     
 
 
+
+def get_share_applied(payload, payload2):
+	""" Apply for shares """
+	try:
+		APPLY_SHARE_URL = os.getenv("APPLY_SHARE_URL")
+		authorization = get_authorization(payload)
+		print(authorization)
+		headers['Authorization'] = authorization
+		time.sleep(3)
+		response = requests.post(APPLY_SHARE_URL, json=payload2, headers=headers)
+		if response.status_code == 201:
+			return response.json()
+	except requests.exceptions.RequestException as e:
+		print(f"An error occurred: {e}")
+		return None

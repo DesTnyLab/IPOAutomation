@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import render
-from account.models import AccountDetials
+from account.models import AccountDetials, BankDetails
 from .models import CompanyShare
-from .meroshare import get_applicable_shares
+from .meroshare import get_applicable_shares, get_share_applied
 from .utils import parse_date
 from django.views.decorators.http import require_GET
 from django.views.decorators.csrf import csrf_exempt
@@ -69,14 +69,12 @@ def check_status(request, user_id, share_id):
         "username": user.username,
         "password": user.password
     }
-    print(payload)
     response = get_applicable_shares(payload)
-    print(response['object'])
 
     for item in response['object']:
         print(item.get('action'))
         if item['companyShareId'] == share.company_share_id:
-            if item.get('action') == 'edit':
+            if (item.get('action') == 'edit') or (item.get('action') == 'inProcess'):
                 return JsonResponse({'status': 'False'})
             else:
                 return JsonResponse({'status': 'True'})
@@ -84,3 +82,41 @@ def check_status(request, user_id, share_id):
     return JsonResponse({'status': 'True'})
 
 
+
+
+
+def apply_now(request, user_id, share_id):
+    try: 
+        user = AccountDetials.objects.get(id=user_id)
+        share = CompanyShare.objects.get(id=share_id)
+        bank = BankDetails.objects.get(account=user)
+        payload = {
+            "clientId": user.clientId,
+            "username": user.username,
+            "password": user.password
+        }
+        payload2 = {
+            "accountBranchId": int(bank.account_branch_id),
+            "accountNumber": bank.account_number,
+            "accountTypeId": int(bank.account_type_id),
+            "appliedKitta": "10",
+            "bankId": bank.bank_id,
+            "boid": user.get_boid,
+            "companyShareId": str(share.company_share_id),
+            "crnNumber": user.crn_number,
+            "customerId": int(bank.customer_id),
+            "demat": user.get_demat,
+            "transactionPIN": user.pin
+        }
+        
+        response = get_share_applied(payload, payload2)
+        return JsonResponse({'status': 'Success',
+                             'data': response})
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return JsonResponse({'status': 'Failed',
+                             'data': str(e)})
+
+
+    
