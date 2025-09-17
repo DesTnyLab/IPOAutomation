@@ -9,8 +9,30 @@ load_dotenv()  # loads variables from .env
 
 headers = json.loads(os.getenv("MEROSHARE_HEADERS"))
 
-MEROSHARE_LOGIN_URL = os.getenv("MEROSHARE_LOGIN_URL")
+MEROSHARE_LOGIN_URL = os.getenv("MEROSHARE_LOGIN_URL_TEST")
 MEROSHARE_BANK_URL = os.getenv("MEROSHARE_BANK_URL")
+
+
+
+def validate_user1(payload, object):
+    try: 
+        print("Validating user with payload:", payload)
+        response = requests.post(MEROSHARE_LOGIN_URL, json=payload)
+        if response.status_code == 200:
+            print("User validated successfully")
+            return True
+        else:
+            print("User validation failed")
+            return False
+       
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return False
+    
+
+
+
+
 
 
 
@@ -56,4 +78,3 @@ def get_bank_details(authorization_token, object):
         return False
 
 
-        

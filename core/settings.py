@@ -120,7 +120,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]  # Optional: where your static files are located
+STATIC_ROOT = BASE_DIR / "staticfiles"  # Where `collectstatic` will place files
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -131,3 +135,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # secure_login_project/settings.py
 
 LOGIN_REDIRECT_URL = 'home'  # Change this to your desired redirect page (e.g., home or dashboard)
+
+
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_BEAT_SCHEDULE = {}
+CELERY_TIMEZONE = "UTC"  # or your local timezone
+
+
+# CELERY_BEAT_SCHEDULE = {
+#     "delete-expired-offers-every-day": {
+#         "task": "app.tasks.delete_expired_offers",
+#         "schedule": crontab(hour=0, minute=0),  # every day at midnight
+#     },
+# }
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    "print-hello-world-every-1-minute": {
+        "task": "apply.tasks.delete_expired_sheres",
+        "schedule": crontab(minute="*/1"),  # runs every 1 minute
+    },
+}
+
+
