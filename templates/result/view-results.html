@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %} Result Reports {% endblock %}
+
+{% block content %}
+<style>
+.results-container {
+    margin: 40px auto;
+    max-width: 1000px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.results-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.user-info {
+    margin-bottom: 25px;
+    font-size: 15px;
+    padding: 10px 15px;
+    background: #f9f9f9;
+    border-left: 4px solid #007bff;
+    border-radius: 6px;
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.results-table th, .results-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.results-table th {
+    background: #007bff;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.results-table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.status-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #fff;
+    cursor: default;
+}
+
+.status-unknown { background: #6c757d; }   /* Grey */
+.status-allotted { background: #28a745; }  /* Green */
+.status-not { background: #dc3545; }       /* Red */
+</style>
+
+<div class="results-container">
+    <h2>Result Reports</h2>
+
+    <div class="user-info">
+        <p><strong>Account Name:</strong> {{ user.name }}</p>
+        <p><strong>Demat:</strong> {{ user.get_demat }}</p>
+    </div>
+
+    <table class="results-table">
+        <thead>
+            <tr>
+                <th>Company Name</th>
+                <th>Scrip</th>
+                <th>Share Type</th>
+                <th>Group</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td>{{ report.name }}</td>
+                <td>{{ report.scrip }}</td>
+                <td>{{ report.shareTypeName }}</td>
+                <td>{{ report.groupName }}</td>
+                <td>
+                    {% if report.status == "Not Alloted" %}
+                        <button class="status-btn status-not">Not Alloted</button>
+                    {% elif report.status == "Alloted" %}
+                        <button class="status-btn status-allotted">Alloted</button>
+                    {% else %}
+                        <button class="status-btn status-unknown">Unknown</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No reports available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

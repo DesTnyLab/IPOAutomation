@@ -159,3 +159,8 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 
+# settings.py (or celery.py)
+CELERY_BROKER_URL = 'redis://localhost:6379/0'          # for message broker
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'      # for task results
+CELERY_TASK_TRACK_STARTED = True                        # optional, tracks STARTED state
+CELERY_TASK_TIME_LIMIT = 300                            # optional, task time limit in seconds

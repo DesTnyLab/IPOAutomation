@@ -64,7 +64,21 @@ class AccountView(TemplateView):
 
         })
 
-# def create_account(request):
+
+
+def delete_Account(request, account_id):
+    try:
+        account = AccountDetials.objects.get(id=account_id)
+        account.delete()
+        messages.success(request, "Account deleted successfully.")
+    except AccountDetials.DoesNotExist:
+        messages.error(request, "Account not found.")
+    return redirect('account:home')
+
+
+# def create
+# 
+# _account(request):
 #     if request.method == 'POST':
 #         form = AccountDetailsForm(request.POST)
 #         username = request.POST.get('username')

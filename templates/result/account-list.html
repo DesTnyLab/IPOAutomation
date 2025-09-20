@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}Account List{% endblock %}
+
+{% block content %}
+<style>
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* 3 in row if space */
+    gap: 20px;
+    margin: 30px auto;
+    max-width: 1200px;
+    padding: 0 15px;
+}
+
+.share-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.share-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.share-card p {
+    margin: 8px 0;
+    font-size: 15px;
+    color: #444;
+}
+
+.share-card strong {
+    color: #222;
+}
+
+.share-card button {
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.share-card button:hover {
+    background: #0056b3;
+}
+
+.no-shares {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin-top: 40px;
+}
+</style>
+
+<div class="cards-grid">
+    {% for account in accounts %}
+        <div class="share-card">
+            <p><strong>Account Name:</strong> {{ account.name }}</p>
+            <p><strong>Demat Number:</strong> {{ account.get_demat }}</p>
+            <p><strong>Applied Kitta:</strong> 10</p>
+            <div>
+                <a href="{% url 'result:view-results' account.id %}">
+                    <button>View Results</button>
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <p class="no-shares">No account available.</p>
+    {% endfor %}
+</div>
+{% endblock %}

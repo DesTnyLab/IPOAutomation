@@ -454,14 +454,10 @@
       <div class="logo_div">
         <img id="logo" src="{% static 'images/profile.jpg' %}" alt="">
       </div>
-      <a href="">Dashboard</a>
-      <a href="">Stock</a>
-      <a href="">Products</a>
-      <a href="">Create Bill</a>
-      <a href="">Create Order</a>
-      <a href="">Customers</a>
-      <a href="">Suppliers</a>
-      <a href="">Overall Report</a>
+      <a href="{% url 'account:home' %}">Dashboard</a>
+      <a href="{% url 'apply:applicable-shares' %}">Apply IPO</a>
+      <a href="{% url 'result:home' %}">IPO Result</a>
+      
 
     </div>
     <div class="main-content" style="width: 85%;">

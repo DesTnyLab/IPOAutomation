@@ -91,7 +91,10 @@ def get_share_applied(payload, payload2):
 		headers['Authorization'] = authorization
 		time.sleep(3)
 		response = requests.post(APPLY_SHARE_URL, json=payload2, headers=headers)
+		print(response.status_code)
+		print(response)
 		if response.status_code == 201:
+			print(response.json())
 			return response.json()
 	except requests.exceptions.RequestException as e:
 		print(f"An error occurred: {e}")
