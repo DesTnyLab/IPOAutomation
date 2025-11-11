@@ -87,11 +87,6 @@ IPOAutomation/
 └── manage.py
 ```
 
-## 🔐 Security Notes
-
-- Do **not** store MeroShare credentials directly in the database.
-- Use `.env` or secret management tools to protect sensitive data.
-- Keep Redis password-protected if running in production.
 
 ## 🤝 Contributing
 
