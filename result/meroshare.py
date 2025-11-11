@@ -91,3 +91,6 @@ def check_results(id, payload):
             return response.json()
     except requests.exceptions.RequestException:
         return None
+    
+
+    

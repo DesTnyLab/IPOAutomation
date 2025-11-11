@@ -1,0 +1,49 @@
+Django==5.2.6
+gunicorn==23.0.0
+
+psycopg2-binary==2.9.9
+redis==6.4.0
+
+celery==5.5.3
+kombu==5.5.4
+billiard==4.2.1
+vine==5.1.0
+amqp==5.3.1
+django-celery-beat==2.8.1
+  # keep only one
+django-celery-email==3.0.0
+
+# DRF + Auth
+djangorestframework==3.15.1
+djangorestframework-simplejwt==5.3.1
+djoser==2.2.2
+
+# Utilities
+python-dotenv==1.1.1
+environ==1
+python-dateutil==2.9.0.post0
+six==1.17.0
+sqlparse==0.5.3
+tzdata==2025.2
+
+# Redis result backend UI (optional)
+flower==2.0.1
+
+# Image/Report/Chart tools
+pillow==10.3.0
+weasyprint==63.0
+num2words==0.5.13
+django-phonenumber-field==8.0.0
+
+# Analytics & Forecasting
+numpy>=1.26
+pandas>=2.1
+matplotlib>=3.8
+statsmodels>=0.14.0
+prophet>=1.1.4
+plotly>=5.15.0
+django-chartjs>=1.2
+
+# AI / LLM Workflows
+langchain-core
+langgraph

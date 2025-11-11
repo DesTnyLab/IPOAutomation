@@ -1,0 +1,145 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+    command: /start
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    expose:
+      - 8000
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings.dev
+      - PG_HOST=postgres
+      - PG_PORT=5432
+    depends_on:
+      - postgres
+    networks:
+      - ipo-automate
+
+  postgres:
+    image: postgres:15.0-alpine
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - ipo-automate # Use the correct network name
+
+
+  nginx:
+    build:
+      context: ./docker/Nginx
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - api
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    ports:
+      - "80:80"
+    networks:
+      - ipo-automate
+
+  redis:
+      image: redis:5-alpine
+      networks:
+          - ipo-automate
+
+
+  beat:
+    build: 
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+
+    command: /celerybeat
+    volumes:
+          - .:/app
+    env_file:
+          - .env
+    environment:
+          - DJANGO_SETTINGS_MODULE=core.settings.dev
+          - PG_HOST=postgres
+          - PG_PORT=5432
+    depends_on:
+          - redis
+          - postgres
+    networks:
+          - ipo-automate
+
+
+  worker:
+    build: 
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+
+    command: /celeryworker
+    volumes:
+          - .:/app
+    env_file:
+          - .env
+    environment:
+          - DJANGO_SETTINGS_MODULE=core.settings.dev
+          - PG_HOST=postgres
+          - PG_PORT=5432
+    depends_on:
+          - redis
+          - postgres
+    networks:
+          - ipo-automate
+
+
+  flower:
+    image: mher/flower:2.0.1
+    container_name: flower
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - FLOWER_BASIC_AUTH=admin:password
+    depends_on:
+      - redis
+      - worker
+    networks:
+      - ipo-automate
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    restart: unless-stopped
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    networks:
+      - ipo-automate
+
+
+
+networks:
+  ipo-automate:
+    driver: bridge
+   
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+  jenkins_home:

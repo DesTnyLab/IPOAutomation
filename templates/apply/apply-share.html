@@ -2,7 +2,10 @@
 {% load static %}
 {% block title %}Apply Share{% endblock %}
 
-{% block content %}
+ 
+{% block header %}
+<!-- Font Awesome -->
+
 
 <style>
 /* Container */
@@ -96,6 +99,10 @@
     margin-top: 20px;
 }
 </style>
+
+{% endblock %}
+
+{% block content %}
 
 <div class="apply-container">
     <h2>{{ share.company_name }} ({{ share.share_group_name }})</h2>

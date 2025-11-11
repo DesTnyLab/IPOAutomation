@@ -1,6 +1,6 @@
 
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
@@ -8,11 +8,40 @@ from .forms import AccountDetailsForm
 from .models import AccountDetials
 from .meroshare import validate_user1
 from django.views.generic import TemplateView
-
-
 from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class AccountView(TemplateView):
+
+
+
+
+
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('account:home')  # Redirect to a success page.
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    else:
+        form = AuthenticationForm()
+    return render(request, 'account/login.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('account:login')
+
+class AccountView(LoginRequiredMixin,TemplateView):
     template_name = "account/home.html"
 
     def get_context_data(self, **kwargs):

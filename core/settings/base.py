@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-f!=wx1gqmuh#-uujflt9b$^+td30wdc8j1x4j3=-j1ja089d!p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account',
     'apply',
     'result',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -78,12 +79,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
@@ -134,33 +129,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # secure_login_project/settings.py
 
-LOGIN_REDIRECT_URL = 'home'  # Change this to your desired redirect page (e.g., home or dashboard)
+# LOGIN_REDIRECT_URL = 'home'  # Change this to your desired redirect page (e.g., home or dashboard)
+LOGIN_URL = 'login/'
+LOGOUT_REDIRECT_URL = 'login/'
 
 
-
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
-CELERY_BEAT_SCHEDULE = {}
-CELERY_TIMEZONE = "UTC"  # or your local timezone
-
-
-# CELERY_BEAT_SCHEDULE = {
-#     "delete-expired-offers-every-day": {
-#         "task": "app.tasks.delete_expired_offers",
-#         "schedule": crontab(hour=0, minute=0),  # every day at midnight
-#     },
-# }
 from celery.schedules import crontab
 
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+
 CELERY_BEAT_SCHEDULE = {
-    "print-hello-world-every-1-minute": {
-        "task": "apply.tasks.delete_expired_sheres",
-        "schedule": crontab(minute="*/1"),  # runs every 1 minute
+    "delete-expired-shares-every-minute": {
+        "task": "apply.tasks.print_hello",
+        "schedule": crontab(minute="*/1"),
+    },
+    "shares-every-minute": {
+        "task": "result.tasks.i_am_a_task",
+        "schedule": crontab(minute="*/1"),
     },
 }
 
-
-# settings.py (or celery.py)
-CELERY_BROKER_URL = 'redis://localhost:6379/0'          # for message broker
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'      # for task results
-CELERY_TASK_TRACK_STARTED = True                        # optional, tracks STARTED state
-CELERY_TASK_TIME_LIMIT = 300                            # optional, task time limit in seconds
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 300

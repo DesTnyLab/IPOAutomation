@@ -1,21 +1,197 @@
-<!-- accounts/templates/accounts/login.html -->
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
-  <div class="login-container">
-    <h2>Login</h2>
-    <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Login</button>
-    </form>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #232526, #414345);
+            color: #fff;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            animation: fadeInUp 0.7s ease;
+            text-align: center;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #ffb84c;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: block;
+            color: #eee;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: #2c2f34;
+            border: 1px solid #444;
+            color: #fff;
+            font-size: 15px;
+            transition: .2s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #ffb84c;
+            outline: none;
+            box-shadow: 0 0 6px #ffb84c;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #ffb84c, #e08a14);
+            color: #000;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        button:hover {
+            transform: scale(1.03);
+        }
+
+        .info-box {
+            margin-top: 20px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .info-box a {
+            color: #ffdf8f;
+            text-decoration: none;
+        }
+
+        .info-box a:hover {
+            text-decoration: underline;
+        }
+
+        /* Popup */
+        .popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 14px 22px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            font-weight: 600;
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Message Colors */
+        .success { color: #0a8a39; }
+        .error { color: #cc0000; }
+        .info { color: #0055ff; }
+        .warning { color: #e6a300; }
+    </style>
+</head>
+
+<body>
 
     {% if messages %}
-      <div class="messages">
+    <div id="popup-message" class="popup">
         {% for message in messages %}
-          <p class="{{ message.tags }}">{{ message }}</p>
+        <span class="{{ message.tags }}">{{ message }}</span>
         {% endfor %}
-      </div>
+    </div>
     {% endif %}
-  </div>
-{% endblock %}
+
+    <div class="login-container">
+        <h1>MeroShare Automation</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username" required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password" required>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="info-box">
+            <p>Use <b>admin / admin</b> to login.</p>
+            <p>For support: <a href="mailto:mzdestiny69@gmail.com">mzdestiny69@gmail.com</a></p>
+            <br>
+            <p>⚠ For educational use only.</p>
+            <p>Credentials may be visible. Request private version.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const popup = document.getElementById("popup-message");
+            if (popup) {
+                popup.style.display = "block";
+                setTimeout(() => {
+                    popup.style.opacity = "0";
+                    setTimeout(() => popup.remove(), 600);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>
