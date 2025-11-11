@@ -130,8 +130,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # secure_login_project/settings.py
 
 # LOGIN_REDIRECT_URL = 'home'  # Change this to your desired redirect page (e.g., home or dashboard)
-LOGIN_URL = 'login/'
-LOGOUT_REDIRECT_URL = 'login/'
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 
 from celery.schedules import crontab

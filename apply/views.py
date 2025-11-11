@@ -6,6 +6,7 @@ from .meroshare import get_applicable_shares, get_share_applied
 from .utils import parse_date
 from django.views.decorators.http import require_GET
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -13,7 +14,7 @@ def home(request):
     return None
 
 
-
+@login_required
 def auto_applicable_shares(request):
     """ Fetch the applicable shares for the logged in user """
     try:
@@ -43,14 +44,14 @@ def auto_applicable_shares(request):
         print(f"An error occurred: {e}")
 
 
-
+@login_required
 def view_applicable_shares(request):
     shares = CompanyShare.objects.all().order_by('-issue_open_date')
     return render(request, 'apply/share-list.html', {'shares': shares})
 
 
 
-
+@login_required
 def apply_share(request, share_id):
     accounts = AccountDetials.objects.all()
     share = CompanyShare.objects.get(company_share_id=share_id)
@@ -84,7 +85,7 @@ def check_status(request, user_id, share_id):
 
 
 
-
+@login_required
 def apply_now(request, user_id, share_id):
     try: 
         user = AccountDetials.objects.get(id=user_id)

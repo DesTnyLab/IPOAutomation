@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -94,7 +94,7 @@ class AccountView(LoginRequiredMixin,TemplateView):
         })
 
 
-
+@login_required
 def delete_Account(request, account_id):
     try:
         account = AccountDetials.objects.get(id=account_id)
@@ -134,7 +134,7 @@ def delete_Account(request, account_id):
 #     })
 
 
-
+@login_required
 def validate_account(object):
     """ Validate user account if they got logged in to meroshare """
     clientid, username, password = object.clientId, object.username, object.password
@@ -160,3 +160,8 @@ def validate_account(object):
 
 
     
+def index(request):
+    return render(request, 'index.html')
+
+def docs(request):
+    return render(request, 'new.html')

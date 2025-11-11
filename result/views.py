@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Report
 from account.models import AccountDetials
 from .meroshare import get_shares_reports, check_results
-
+from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
@@ -11,7 +11,7 @@ from django.http import JsonResponse
 
 
 
-
+@login_required
 # Create your views here.
 def list_account(request):
     accounts = AccountDetials.objects.all()
@@ -23,7 +23,7 @@ def list_account(request):
 
 
 
-
+@login_required
 def view_results(request, account_id):
     user = AccountDetials.objects.get(id=account_id)
 

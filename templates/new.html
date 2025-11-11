@@ -1,195 +1,548 @@
-
-
-
-
-{% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="{% static '/css/base.css' %}">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPOAutomation - Automate Your MeroShare IPO Applications</title>
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: #eef2f7;
-      color: #333;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #1a202c;
       overflow-x: hidden;
     }
 
-    /* Sidebar */
-    .sidebar {
-      width: 250px;
-      height: 100vh;
-      background: #111827;
-      color: #fff;
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Animated Background */
+    .bg-animation {
       position: fixed;
+      width: 100%;
+      height: 100%;
       top: 0;
       left: 0;
-      padding: 25px 20px;
-      transition: 0.35s ease;
-      box-shadow: rgba(0, 0, 0, 0.25) 4px 0px 10px;
+      z-index: -1;
+      overflow: hidden;
     }
 
-    .sidebar h2 {
-      text-align: center;
-      font-size: 22px;
-      margin-bottom: 25px;
-      font-weight: 600;
-      color: #facc15;
-      letter-spacing: 1px;
-    }
-
-    .sidebar a {
+    .bg-animation span {
+      position: absolute;
       display: block;
-      padding: 14px 12px;
-      margin: 8px 0;
-      text-decoration: none;
-      color: #d1d5db;
-      border-radius: 8px;
-      transition: 0.3s;
-      font-size: 17px;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      animation: float 25s infinite;
+      border-radius: 50%;
     }
 
-    .sidebar a:hover,
-    .sidebar a.active {
-      background: #2563eb;
-      color: #fff;
-      transform: translateX(5px);
-    }
+    .bg-animation span:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .bg-animation span:nth-child(2) { left: 20%; animation-delay: 2s; width: 30px; height: 30px; }
+    .bg-animation span:nth-child(3) { left: 30%; animation-delay: 4s; }
+    .bg-animation span:nth-child(4) { left: 40%; animation-delay: 6s; width: 25px; height: 25px; }
+    .bg-animation span:nth-child(5) { left: 50%; animation-delay: 8s; }
+    .bg-animation span:nth-child(6) { left: 60%; animation-delay: 10s; width: 35px; height: 35px; }
+    .bg-animation span:nth-child(7) { left: 70%; animation-delay: 12s; }
+    .bg-animation span:nth-child(8) { left: 80%; animation-delay: 14s; width: 28px; height: 28px; }
+    .bg-animation span:nth-child(9) { left: 90%; animation-delay: 16s; }
 
-    /* Main Content */
-    .main-content {
-      margin-left: 250px;
-      padding: 25px;
-      transition: 0.35s ease;
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
     }
 
     /* Header */
-    .header {
+    header {
+      padding: 30px 0;
+      animation: slideDown 0.8s ease;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px 30px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      transform: translateY(-2px);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
       background: white;
-      padding: 18px;
-      border-radius: 10px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-      margin-bottom: 25px;
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .hero {
       text-align: center;
+      padding: 80px 0;
+      animation: fadeIn 1s ease;
     }
 
-    .company_title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #111827;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    #address {
-      font-size: 0.95rem;
-      opacity: 0.75;
-      margin-top: 6px;
-    }
-
-    /* Mobile Toggle */
-    #sidebarToggle {
-      display: none;
-    }
-
-    @media (max-width: 1024px) {
-      .sidebar {
-        left: -250px;
-      }
-
-      .sidebar.active {
-        left: 0;
-      }
-
-      .main-content {
-        margin-left: 0;
-      }
-
-      #sidebarToggle {
-        display: block;
-        position: fixed;
-        top: 15px;
-        right: 20px;
-        font-size: 1.7rem;
-        z-index: 1000;
-        background: #2563eb;
-        padding: 10px 14px;
-        border-radius: 6px;
-        border: none;
-        color: white;
-      }
-    }
-
-    /* Popup Notification */
-    .popup {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #fff;
-      border-left: 6px solid #2563eb;
-      padding: 14px 20px;
-      border-radius: 10px;
-      display: none;
-      box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 10px;
-      font-weight: 600;
-      animation: fadeSlide 0.6s forwards;
-    }
-
-    @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(15px); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    .hero h1 {
+      font-size: 64px;
+      color: white;
+      margin-bottom: 20px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .hero .subtitle {
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 15px;
+    }
+
+    .hero .note {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 40px;
+      font-style: italic;
+    }
+
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 8px 16px;
+      border-radius: 20px;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s;
+    }
+
+    .badge:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: white;
+      color: #667eea;
+      padding: 18px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 18px;
+      transition: all 0.3s;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      margin-top: 20px;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Glass Card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 40px;
+      margin: 40px 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      animation: slideUp 0.8s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .glass-card h2 {
+      color: white;
+      font-size: 36px;
+      margin-bottom: 30px;
+      font-weight: 800;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .feature-card h3 {
+      color: white;
+      font-size: 20px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .feature-card p {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+    }
+
+    /* Code Block */
+    .code-block {
+      background: #1a202c;
+      color: #e2e8f0;
+      padding: 25px;
+      border-radius: 15px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin: 20px 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .code-block::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .code-block::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    /* Architecture Diagram */
+    .arch-diagram {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 16px;
+      color: white;
+      margin: 30px 0;
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+    }
+
+    .tech-stack {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .tech-pill {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+      padding: 12px 24px;
+      border-radius: 25px;
+      color: white;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s;
+    }
+
+    .tech-pill:hover {
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Steps */
+    .steps {
+      counter-reset: step;
+    }
+
+    .step {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      margin: 20px 0;
+      border-left: 4px solid white;
+      position: relative;
+      padding-left: 60px;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background: white;
+      color: #667eea;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    .step h3 {
+      color: white;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .step p {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 60px;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 42px; }
+      .nav-links { display: none; }
+      .glass-card { padding: 25px; }
+    }
   </style>
-
-  <title>{% block title %}{% endblock %}</title>
 </head>
-
 <body>
-  <button id="sidebarToggle"><i class="fa fa-bars"></i></button>
-
-  <div class="sidebar">
-    <h2>MEROSHARE TOOL</h2>
-    <a href="{% url 'account:home' %}">Dashboard</a>
-    <a href="{% url 'apply:applicable-shares' %}">Apply IPO</a>
-    <a href="{% url 'result:home' %}">IPO Result</a>
+  <div class="bg-animation">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
 
-  <div class="main-content">
-    <div class="header">
-      <div class="company_title">MeroShare Automation</div>
-      <div id="address">Apply IPO and View Result in One Click</div>
+  <div class="container">
+    <header>
+      <nav>
+        <div class="logo">🚀 IPOAutomation</div>
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+          <li><a href="#installation">Install</a></li>
+          <li><a href="#contribute">Contribute</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>Automate Your<br>MeroShare IPO Applications</h1>
+      <p class="subtitle">Production-ready system for seamless IPO automation</p>
+      <p class="note">⚠️ For educational and personal use only. Not responsible for credential loss.</p>
+      
+      <div class="badges">
+        <span class="badge">🐍 Django 4.0+</span>
+        <span class="badge">🐘 PostgreSQL 14+</span>
+        <span class="badge">⚡ Redis</span>
+        <span class="badge">🌿 Celery</span>
+        <span class="badge">📜 MIT License</span>
+      </div>
+
+      <a href="https://github.com/DesTnyLab/IPOAutomation" class="cta-button">View on GitHub →</a>
+    </section>
+
+    <div id="features" class="glass-card">
+      <h2>✨ Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>🤖 Automated Applications</h3>
+          <p>Automatically logs into MeroShare and applies for open IPOs without manual intervention.</p>
+        </div>
+        <div class="feature-card">
+          <h3>📊 Multiple DP Support</h3>
+          <p>Manage and apply using multiple depositary participant accounts simultaneously.</p>
+        </div>
+        <div class="feature-card">
+          <h3>⏰ Scheduled Tasks</h3>
+          <p>Schedule applications with Celery Beat to run precisely at IPO opening times.</p>
+        </div>
+        <div class="feature-card">
+          <h3>📈 Monitoring Dashboard</h3>
+          <p>Track logs, application statuses, and complete application history in real-time.</p>
+        </div>
+        <div class="feature-card">
+          <h3>⚡ Async Processing</h3>
+          <p>Celery + Redis enables scalable background task processing for high volume.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🔒 Secure & Reliable</h3>
+          <p>Built with Django security best practices and robust error handling.</p>
+        </div>
+      </div>
     </div>
 
-    {% if messages %}
-    <div id="popup" class="popup">
-      {% for message in messages %}
-      <span>{{ message }}</span>
-      {% endfor %}
+    <div id="architecture" class="glass-card">
+      <h2>🏛 System Architecture</h2>
+      <div class="arch-diagram">
+        <strong>Django</strong> → <strong>PostgreSQL</strong> ↔ <strong>Celery Workers</strong> → <strong>Redis</strong> → <strong>MeroShare API</strong>
+        <p style="margin-top: 15px; font-size: 14px;">Workers handle login, IPO selection, and submission — recording results to database.</p>
+      </div>
+      
+      <div class="tech-stack">
+        <span class="tech-pill">Django REST</span>
+        <span class="tech-pill">PostgreSQL</span>
+        <span class="tech-pill">Redis Broker</span>
+        <span class="tech-pill">Celery Tasks</span>
+        <span class="tech-pill">Nginx</span>
+      </div>
     </div>
-    {% endif %}
 
-    {% block content %}{% endblock %}
+    <div id="installation" class="glass-card">
+      <h2>📦 Quick Installation</h2>
+      
+      <div class="steps">
+        <div class="step">
+          <h3>Clone Repository</h3>
+          <div class="code-block">git clone https://github.com/DesTnyLab/IPOAutomation.git
+cd IPOAutomation</div>
+        </div>
+
+        <div class="step">
+          <h3>Setup Environment</h3>
+          <div class="code-block">python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt</div>
+        </div>
+
+        <div class="step">
+          <h3>Configure Settings</h3>
+          <div class="code-block">cp .env.example .env
+# Edit .env with your credentials</div>
+        </div>
+
+        <div class="step">
+          <h3>Run Migrations</h3>
+          <div class="code-block">python manage.py migrate
+python manage.py runserver</div>
+        </div>
+
+        <div class="step">
+          <h3>Start Workers</h3>
+          <div class="code-block">celery -A core worker -l info
+celery -A core beat -l info</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <h2>🐳 Docker Deployment</h2>
+      <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">One command to launch the entire stack:</p>
+      <div class="code-block">docker-compose up -d</div>
+      <p style="color: rgba(255,255,255,0.7); margin-top: 15px; font-size: 14px;">Includes Django, PostgreSQL, Redis, Celery workers, and Nginx reverse proxy.</p>
+    </div>
+
+    <div id="contribute" class="glass-card">
+      <h2>🤝 Contribute</h2>
+      <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px;">We welcome contributions from the community!</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>1. Fork</h3>
+          <p>Fork the repository to your GitHub account.</p>
+        </div>
+        <div class="feature-card">
+          <h3>2. Branch</h3>
+          <p>Create a feature branch for your changes.</p>
+        </div>
+        <div class="feature-card">
+          <h3>3. Submit PR</h3>
+          <p>Open a pull request with tests and description.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p><strong>IPOAutomation</strong> • <a href="https://github.com/DesTnyLab/IPOAutomation" target="_blank">GitHub Repository</a></p>
+      <p style="margin-top: 10px; font-size: 13px;">MIT License • Built with ❤️ • 2025</p>
+    </footer>
   </div>
-
-<script>
-  $("#sidebarToggle").click(() => $(".sidebar").toggleClass("active"));
-
-  setTimeout(() => {
-    $("#popup").fadeOut();
-  }, 3000);
-</script>
-
 </body>
 </html>
