@@ -1,106 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IPOAutomation</title>
+# 🚀 IPOAutomation
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+IPOAutomation is a web-based system that automates the process of applying for IPO shares in the **MeroShare** platform.
+It simplifies and accelerates the IPO application process by automating repetitive steps such as login, selecting shares, and submitting applications — helping users save time and avoid manual errors.
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+## ✨ Features
 
-  <style>
-    body { font-family: "Inter", sans-serif; }
-  </style>
-</head>
-<body class="bg-gray-50 text-gray-900">
+- 🔁 **Automated IPO Application** — Apply for IPOs automatically through MeroShare.
+- 👥 **Multiple Account Support** — Manage and apply from multiple DP accounts.
+- 🕒 **Scheduled Applications** — Set tasks to run automatically using Celery Beat.
+- 📊 **User Dashboard** — Track application status and logs from one place.
+- 🔒 **Secure Credential Handling** — Credentials stored securely using environment variables.
+- ⚙️ **Asynchronous Processing** — Celery handles background automation tasks efficiently.
 
-  <!-- Hero Section -->
-  <header class="text-center py-20 bg-gradient-to-r from-blue-700 to-blue-500 text-white">
-    <h1 class="text-4xl font-bold">🚀 IPOAutomation</h1>
-    <p class="mt-3 text-lg opacity-90 max-w-2xl mx-auto">
-      Automate IPO applications on the MeroShare platform — fast, reliable, and hassle-free.
-    </p>
+## 🛠️ Tech Stack
 
-    <div class="mt-6 flex justify-center gap-4">
-      <a href="docs/index.html" class="px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow hover:bg-gray-200">
-        View Documentation
-      </a>
-      <a href="https://github.com/DesTnyLab/IPOAutomation" class="px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg shadow hover:bg-gray-800">
-        View Project
-      </a>
-    </div>
-  </header>
+| Component        | Technology Used      |
+|-----------------|----------------------|
+| **Backend**     | Django (Python)      |
+| **Database**    | PostgreSQL           |
+| **Task Queue**  | Celery               |
+| **Broker**      | Redis                |
+| **Frontend**    | Django Templates     |
+| **Deployment (Optional)** | Docker, Nginx |
 
-  <!-- Features -->
-  <section class="max-w-6xl mx-auto py-16 px-6">
-    <h2 class="text-3xl font-semibold text-center mb-12">✨ Features</h2>
+## ⚙️ Installation Guide
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      
-      <div class="p-6 bg-white rounded-xl shadow">
-        <h3 class="font-semibold mb-2">🔁 Automated IPO Application</h3>
-        <p>Automatically apply for IPOs directly through MeroShare.</p>
-      </div>
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/DesTnyLab/IPOAutomation.git
+cd IPOAutomation
+```
 
-      <div class="p-6 bg-white rounded-xl shadow">
-        <h3 class="font-semibold mb-2">👥 Multiple Accounts</h3>
-        <p>Manage and apply from multiple DP accounts efficiently.</p>
-      </div>
+### 2️⃣ Create and Activate Virtual Environment
+```bash
+python3 -m venv env
+source env/bin/activate        # On Windows: env\Scripts\activate
+```
 
-      <div class="p-6 bg-white rounded-xl shadow">
-        <h3 class="font-semibold mb-2">🕒 Scheduled Applications</h3>
-        <p>Run tasks automatically using Celery Beat scheduling.</p>
-      </div>
+### 3️⃣ Install Required Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-      <div class="p-6 bg-white rounded-xl shadow">
-        <h3 class="font-semibold mb-2">📊 Dashboard Monitoring</h3>
-        <p>Track IPO status, history, and logs in one place.</p>
-      </div>
+### 4️⃣ Configure Environment Variables
+Copy the example file and update the credentials.
+```bash
+cp .env.example .env
+```
 
-      <div class="p-6 bg-white rounded-xl shadow">
-        <h3 class="font-semibold mb-2">🔒 Secure Credentials</h3>
-        <p>Stored safely using environment variables.</p>
-      </div>
+### 5️⃣ Apply Database Migrations
+```bash
+python manage.py migrate
+```
 
-      <div class="p-6 bg-white rounded-xl shadow">
-        <h3 class="font-semibold mb-2">⚙️ Asynchronous Processing</h3>
-        <p>Celery ensures fast and stable background execution.</p>
-      </div>
+### 6️⃣ Run the Development Server
+```bash
+python manage.py runserver
+```
 
-    </div>
-  </section>
+### 7️⃣ Run Celery Worker
+```bash
+celery -A core worker -l info
+```
 
-  <!-- Tech Stack -->
-  <section class="bg-white py-16 px-6 shadow-inner">
-    <h2 class="text-3xl font-semibold text-center mb-12">🛠️ Tech Stack</h2>
+### 8️⃣ Run Celery Beat Scheduler (for Scheduled IPO Tasks)
+```bash
+celery -A core beat -l info
+```
 
-    <div class="max-w-4xl mx-auto">
-      <table class="w-full border text-left border-gray-300 rounded-lg overflow-hidden">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="p-3 border">Component</th>
-            <th class="p-3 border">Technology Used</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td class="p-3 border">Backend</td><td class="p-3 border">Django</td></tr>
-          <tr><td class="p-3 border">Database</td><td class="p-3 border">PostgreSQL</td></tr>
-          <tr><td class="p-3 border">Task Queue</td><td class="p-3 border">Celery</td></tr>
-          <tr><td class="p-3 border">Broker</td><td class="p-3 border">Redis</td></tr>
-          <tr><td class="p-3 border">Frontend</td><td class="p-3 border">Django Templates</td></tr>
-          <tr><td class="p-3 border">Deployment</td><td class="p-3 border">Docker / Nginx (Optional)</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+## 🧩 Architecture Overview
 
-  <!-- Footer -->
-  <footer class="text-center py-10 mt-20 text-gray-600">
-    © 2025 IPOAutomation — Built with ❤️ using Django & Celery
-  </footer>
+```
+Django Backend ─▶ PostgreSQL ─▶ Celery ─▶ Redis
+```
 
-</body>
-</html>
+## 📂 Folder Structure
+
+```
+IPOAutomation/
+├── core/
+├── accounts/
+├── apply/
+├── static/
+├── templates/
+├── requirements.txt
+└── manage.py
+```
+
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+## 📜 License
+
+MIT License
+
+## ⭐ Support
+
+If you find this project useful, give it a star ⭐ on GitHub!
